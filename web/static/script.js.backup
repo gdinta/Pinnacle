@@ -1,0 +1,683 @@
+// ============================================
+// WealthPath AI - JavaScript Frontend Logic
+// ============================================
+// DOM Elements
+const themeToggle = document.getElementById('themeToggle');
+
+// ============================================
+// Feature 7: Dark/Light Mode Toggle
+// ============================================
+
+if (themeToggle) {
+    themeToggle.addEventListener('click', function() {
+        const root = document.documentElement;
+        const isLight = root.classList.toggle('light-mode');
+        themeToggle.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+}
+
+// Load saved theme on page load
+window.addEventListener('DOMContentLoaded', function() {
+    if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.add('light-mode');
+        if (themeToggle) themeToggle.textContent = '☀️';
+    }
+});
+// DOM Elements
+const jobForm = document.getElementById('jobAnalyzerForm');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const loadSampleBtn = document.getElementById('loadSampleBtn');
+const resultsSection = document.getElementById('resultsSection');
+const formSection = document.getElementById('formSection');
+const landingSection = document.getElementById('landing');
+const loadingState = document.getElementById('loadingState');
+const exportBtn = document.getElementById('exportBtn');
+const newAnalysisBtn = document.getElementById('newAnalysisBtn');
+
+// Charts
+let scoreChart = null;
+let incomeChart = null;
+let growthChart = null;
+
+// ============================================
+// Event Listeners
+// ============================================
+
+jobForm.addEventListener('submit', handleFormSubmit);
+loadSampleBtn.addEventListener('click', loadSampleJob);
+exportBtn.addEventListener('click', exportReport);
+newAnalysisBtn.addEventListener('click', newAnalysis);
+
+// ============================================
+// Form Handling
+// ============================================
+
+async function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    // Show loading state
+    resultsSection.classList.add('hidden');
+    loadingState.classList.remove('hidden');
+    analyzeBtn.disabled = true;
+    
+    try {
+        // Get form data
+        const formData = new FormData(jobForm);
+        const data = Object.fromEntries(formData);
+        
+        // Send to backend
+        const response = await fetch('/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Analysis failed');
+        }
+        
+        const result = await response.json();
+        
+        // Hide loading, show results
+        loadingState.classList.add('hidden');
+        resultsSection.classList.remove('hidden');
+        analyzeBtn.disabled = false;
+        
+        // Scroll to results
+        setTimeout(() => {
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+        
+        // Populate results
+        displayResults(result);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        loadingState.classList.add('hidden');
+        analyzeBtn.disabled = false;
+        alert('Error analyzing job opportunity. Please try again.');
+    }
+}
+
+async function loadSampleJob() {
+    try {
+        const response = await fetch('/sample-job');
+        const sampleData = await response.json();
+        
+        // Populate form with sample data
+        document.getElementById('jobTitle').value = sampleData.jobTitle;
+        document.getElementById('companyName').value = sampleData.companyName;
+        document.getElementById('jobLocation').value = sampleData.jobLocation;
+        document.getElementById('workType').value = sampleData.workType;
+        document.getElementById('jobDescription').value = sampleData.jobDescription;
+        document.getElementById('age').value = sampleData.age;
+        document.getElementById('currentSalary').value = sampleData.currentSalary;
+        document.getElementById('currentMonthlyExpenses').value = sampleData.currentMonthlyExpenses;
+        document.getElementById('currentSavings').value = sampleData.currentSavings;
+        document.getElementById('studentLoanBalance').value = sampleData.studentLoanBalance;
+        document.getElementById('desiredInvestmentPercentage').value = sampleData.desiredInvestmentPercentage;
+        document.getElementById('currentLocation').value = sampleData.currentLocation;
+        
+        // Scroll to form
+        formSection.scrollIntoView({ behavior: 'smooth' });
+        
+    } catch (error) {
+        console.error('Error loading sample job:', error);
+        alert('Error loading sample job. Please try again.');
+    }
+}
+// ============================================
+// Feature 4: What-If Scenarios (HOVER VERSION)
+// ============================================
+
+// Get all scenario buttons
+const scenarioButtons = document.querySelectorAll('.scenario-buttons .btn');
+
+scenarioButtons.forEach(button => {
+    const scenarioType = button.getAttribute('data-scenario');
+    const detailElement = document.getElementById(`scenario-${scenarioType}`);
+    
+    if (!detailElement) return;
+    
+    // Show on hover
+    button.addEventListener('mouseover', function() {
+        // Hide all others
+        document.querySelectorAll('.scenario-detail').forEach(el => {
+            el.classList.add('hidden');
+        });
+        // Show this one
+        detailElement.classList.remove('hidden');
+    });
+    
+    // Hide when mouse leaves button
+    button.addEventListener('mouseout', function() {
+        setTimeout(() => {
+            detailElement.classList.add('hidden');
+        }, 200);
+    });
+});
+
+// Keep visible if hovering over detail box itself
+document.querySelectorAll('.scenario-detail').forEach(detail => {
+    detail.addEventListener('mouseover', function() {
+        this.classList.remove('hidden');
+    });
+    
+    detail.addEventListener('mouseout', function() {
+        setTimeout(() => {
+            this.classList.add('hidden');
+        }, 200);
+    });
+});
+// ============================================
+// Results Display
+// ============================================
+
+function displayResults(result) {
+    // Job info
+    const jobTitle = result.jobInfo.jobTitle;
+    const company = result.jobInfo.companyName;
+    
+    // Update recommendation card
+    const score = result.scores.overallScore;
+    const recommendation = result.recommendation;
+    
+    document.getElementById('recommendationScore').textContent = Math.round(score);
+    document.getElementById('recommendationLevel').textContent = recommendation.level;
+    document.getElementById('recommendationDescription').textContent = recommendation.description;
+    
+    const card = document.getElementById('recommendationCard');
+    card.style.borderColor = recommendation.color;
+    
+    // Update score cards
+    updateScoreCard('salaryGrowth', result.scores.salaryGrowth);
+    updateScoreCard('marketDemand', result.scores.marketDemand);
+    updateScoreCard('companyHealth', result.scores.companyHealth);
+    updateScoreCard('automationSafety', result.scores.automationSafety);
+    updateScoreCard('costOfLiving', result.scores.costOfLiving);
+    updateScoreCard('taxEfficiency', result.scores.taxEfficiency);
+    updateScoreCard('investmentPotential', result.scores.investmentPotential);
+    
+    // Update financial impact
+    document.getElementById('salaryRange').textContent = result.financialImpact.salaryRange;
+    document.getElementById('salaryMidpoint').textContent = `$${result.financialImpact.salaryMidpoint.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('federalTax').textContent = `$${result.financialImpact.federalTax.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('stateTax').textContent = `$${result.financialImpact.stateTax.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('afterTaxIncome').textContent = `$${result.financialImpact.afterTaxIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('adjustedExpenses').textContent = `$${result.financialImpact.adjustedAnnualExpenses.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('investableIncome').textContent = `$${result.financialImpact.annualInvestableIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('flexibleIncome').textContent = `$${result.financialImpact.flexibleIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    
+    // Investment projections
+    document.getElementById('projection5yr').textContent = `$${result.financialImpact.investmentProjection5yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('projection10yr').textContent = `$${result.financialImpact.investmentProjection10yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    document.getElementById('projection20yr').textContent = `$${result.financialImpact.investmentProjection20yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+    
+    // AI Summary
+    document.getElementById('aiSummary').textContent = result.aiSummary;
+    
+    // Risk Flags
+    populateRiskFlags(result.riskFlags);
+    
+    // Skill Suggestions
+    populateSkillSuggestions(result.skillSuggestions);
+    
+    // Adjacent Roles
+    populateAdjacentRoles(result.adjacentRoles);
+    
+    // Charts
+    createCharts(result);
+    
+    // Store result for export
+    window.lastAnalysisResult = result;
+}
+
+function updateScoreCard(id, score) {
+    const element = document.getElementById(id + 'Score');
+    const bar = document.getElementById(id + 'Bar');
+    
+    element.textContent = Math.round(score);
+    bar.style.width = score + '%';
+}
+
+function populateRiskFlags(flags) {
+    const container = document.getElementById('riskFlags');
+    container.innerHTML = '';
+    
+    if (flags.length === 0) {
+        container.innerHTML = '<p style="color: var(--accent-green);">No significant risk flags identified.</p>';
+        return;
+    }
+    
+    flags.forEach(flag => {
+        const flagElement = document.createElement('div');
+        flagElement.className = `risk-flag ${flag.severity}`;
+        
+        const iconMap = {
+            warning: '⚠️',
+            danger: '❌',
+            info: 'ℹ️'
+        };
+        
+        flagElement.innerHTML = `
+            <div class="risk-flag-icon">${iconMap[flag.severity] || '•'}</div>
+            <div class="risk-flag-content">
+                <h5>${flag.flag}</h5>
+                <p>${flag.description}</p>
+            </div>
+        `;
+        
+        container.appendChild(flagElement);
+    });
+}
+
+function populateSkillSuggestions(skills) {
+    const container = document.getElementById('skillSuggestions');
+    container.innerHTML = '';
+    
+    skills.forEach(skill => {
+        const skillElement = document.createElement('div');
+        skillElement.className = 'skill-item';
+        skillElement.textContent = skill;
+        container.appendChild(skillElement);
+    });
+}
+
+function populateAdjacentRoles(roles) {
+    const container = document.getElementById('adjacentRoles');
+    container.innerHTML = '';
+    
+    roles.forEach(role => {
+        const roleElement = document.createElement('div');
+        roleElement.className = 'role-item';
+        roleElement.innerHTML = `
+            <div class="role-item-title">📈 ${role}</div>
+        `;
+        container.appendChild(roleElement);
+    });
+}
+
+// ============================================
+// Charts
+// ============================================
+
+function createCharts(result) {
+    createScoreChart(result.scores);
+    createIncomeChart(result.incomeAllocation);
+    createGrowthChart(result.financialImpact);
+}
+
+function createScoreChart(scores) {
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (scoreChart) {
+        scoreChart.destroy();
+    }
+    
+    const labels = [
+        'Salary Growth',
+        'Market Demand',
+        'Company Health',
+        'Automation Safety',
+        'Cost of Living',
+        'Tax Efficiency',
+        'Investment Potential'
+    ];
+    
+    const data = [
+        scores.salaryGrowth,
+        scores.marketDemand,
+        scores.companyHealth,
+        scores.automationSafety,
+        scores.costOfLiving,
+        scores.taxEfficiency,
+        scores.investmentPotential
+    ];
+    
+    scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Score (0-100)',
+                data: data,
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(6, 182, 212, 0.7)',
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(6, 182, 212, 0.7)',
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(16, 185, 129, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(6, 182, 212, 1)',
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(6, 182, 212, 1)',
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(16, 185, 129, 1)'
+                ],
+                borderWidth: 2,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        color: 'rgba(203, 213, 225, 0.8)'
+                    },
+                    grid: {
+                        color: 'rgba(51, 65, 85, 0.3)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'rgba(203, 213, 225, 0.8)'
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createIncomeChart(allocation) {
+    const ctx = document.getElementById('incomeChart').getContext('2d');
+    
+    if (incomeChart) {
+        incomeChart.destroy();
+    }
+    
+    incomeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Taxes', 'Expenses', 'Investable Income', 'Flexible Income'],
+            datasets: [{
+                data: [
+                    allocation.taxes,
+                    allocation.expenses,
+                    allocation.investableIncome,
+                    allocation.flexibleIncome
+                ],
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.7)',
+                    'rgba(245, 158, 11, 0.7)',
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(6, 182, 212, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(245, 158, 11, 1)',
+                    'rgba(16, 185, 129, 1)',
+                    'rgba(6, 182, 212, 1)'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: 'rgba(203, 213, 225, 0.8)',
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function createGrowthChart(financialImpact) {
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    
+    if (growthChart) {
+        growthChart.destroy();
+    }
+    
+    growthChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Year 1', 'Year 5', 'Year 10', 'Year 20'],
+            datasets: [{
+                label: 'Investment Value ($)',
+                data: [
+                    financialImpact.annualInvestableIncome,
+                    financialImpact.investmentProjection5yr,
+                    financialImpact.investmentProjection10yr,
+                    financialImpact.investmentProjection20yr
+                ],
+                borderColor: 'rgba(16, 185, 129, 1)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(203, 213, 225, 0.8)'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'rgba(203, 213, 225, 0.8)',
+                        callback: function(value) {
+                            return '$' + value.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(51, 65, 85, 0.3)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'rgba(203, 213, 225, 0.8)'
+                    },
+                    grid: {
+                        color: 'rgba(51, 65, 85, 0.3)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// ============================================
+// Export Report
+// ============================================
+
+function exportReport() {
+    const result = window.lastAnalysisResult;
+    
+    if (!result) {
+        alert('No analysis to export. Please run an analysis first.');
+        return;
+    }
+    
+    const report = generateReportText(result);
+    downloadFile(report, 'wealthpath-analysis.txt');
+}
+
+function generateReportText(result) {
+    const jobInfo = result.jobInfo;
+    const scores = result.scores;
+    const financial = result.financialImpact;
+    const recommendation = result.recommendation;
+    
+    const report = `
+════════════════════════════════════════════════════════════════════════════════
+                           WEALTHPATH AI - CAREER ANALYSIS REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+ANALYSIS DATE: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+
+════════════════════════════════════════════════════════════════════════════════
+JOB OPPORTUNITY
+════════════════════════════════════════════════════════════════════════════════
+
+Job Title:              ${jobInfo.jobTitle}
+Company:               ${jobInfo.companyName}
+Location:              ${jobInfo.jobLocation}
+Work Type:             ${result.jobInfo.workType}
+
+════════════════════════════════════════════════════════════════════════════════
+RECOMMENDATION
+════════════════════════════════════════════════════════════════════════════════
+
+Overall WealthPath Score:  ${Math.round(scores.overallScore)}/100
+
+Recommendation Level:      ${recommendation.level}
+${recommendation.description}
+
+════════════════════════════════════════════════════════════════════════════════
+DETAILED SCORES (0-100)
+════════════════════════════════════════════════════════════════════════════════
+
+Salary Growth Score:       ${Math.round(scores.salaryGrowth)}/100
+Market Demand Score:       ${Math.round(scores.marketDemand)}/100
+Company Health Score:      ${Math.round(scores.companyHealth)}/100
+Automation Safety Score:   ${Math.round(scores.automationSafety)}/100
+Cost of Living Score:      ${Math.round(scores.costOfLiving)}/100
+Tax Efficiency Score:      ${Math.round(scores.taxEfficiency)}/100
+Investment Potential Score:${Math.round(scores.investmentPotential)}/100
+
+════════════════════════════════════════════════════════════════════════════════
+FINANCIAL PROJECTIONS
+════════════════════════════════════════════════════════════════════════════════
+
+Estimated Salary Range:        ${financial.salaryRange}
+Estimated Annual Salary:       $${financial.salaryMidpoint.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+Federal Tax (Estimated):       $${financial.federalTax.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+State Tax (Estimated):         $${financial.stateTax.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+After-Tax Income:              $${financial.afterTaxIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+Adjusted Annual Expenses:      $${financial.adjustedAnnualExpenses.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+Annual Investable Income:      $${financial.annualInvestableIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+Flexible Income (After All):   $${financial.flexibleIncome.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+
+════════════════════════════════════════════════════════════════════════════════
+INVESTMENT PROJECTIONS (7% Annual Return)
+════════════════════════════════════════════════════════════════════════════════
+
+5-Year Value:          $${financial.investmentProjection5yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+10-Year Value:         $${financial.investmentProjection10yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+20-Year Value:         $${financial.investmentProjection20yr.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+
+════════════════════════════════════════════════════════════════════════════════
+KEY INSIGHTS
+════════════════════════════════════════════════════════════════════════════════
+
+${result.aiSummary}
+
+════════════════════════════════════════════════════════════════════════════════
+RISK ASSESSMENT
+════════════════════════════════════════════════════════════════════════════════
+
+${result.riskFlags.length > 0 
+    ? result.riskFlags.map(flag => `[${flag.severity.toUpperCase()}] ${flag.flag}\n${flag.description}`).join('\n\n') 
+    : 'No significant risk flags identified.'}
+
+════════════════════════════════════════════════════════════════════════════════
+RECOMMENDED SKILLS TO DEVELOP
+════════════════════════════════════════════════════════════════════════════════
+
+${result.skillSuggestions.map((skill, i) => `${i + 1}. ${skill}`).join('\n')}
+
+════════════════════════════════════════════════════════════════════════════════
+SIMILAR ROLES WITH HIGHER ROI POTENTIAL
+════════════════════════════════════════════════════════════════════════════════
+
+${result.adjacentRoles.map((role, i) => `${i + 1}. ${role}`).join('\n')}
+
+════════════════════════════════════════════════════════════════════════════════
+DISCLAIMER
+════════════════════════════════════════════════════════════════════════════════
+
+This is an educational estimate for demo purposes and should NOT be treated as
+financial, tax, investment, or career advice. All projections are based on
+simplified calculations and mock market data.
+
+Consult with:
+- Financial advisors for investment and tax planning
+- Career counselors for career decisions
+- Tax professionals for accurate tax estimates
+
+════════════════════════════════════════════════════════════════════════════════
+Generated by WealthPath AI - Career ROI Analysis Tool
+════════════════════════════════════════════════════════════════════════════════
+    `.trim();
+    
+    return report;
+}
+
+function downloadFile(content, filename) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+// ============================================
+// New Analysis
+// ============================================
+
+function newAnalysis() {
+    // Reset form
+    jobForm.reset();
+    resultsSection.classList.add('hidden');
+    
+    // Scroll to form
+    formSection.scrollIntoView({ behavior: 'smooth' });
+    
+    // Clear stored result
+    window.lastAnalysisResult = null;
+}
+
+// ============================================
+// Initialization
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('WealthPath AI initialized');
+});

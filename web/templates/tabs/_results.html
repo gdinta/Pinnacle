@@ -1,0 +1,722 @@
+<div class="results-light">
+        <div id="resultsContainer" style="display: none;">
+            <section class="results-page">
+                <div class="results-header">
+                    <div>
+                        <p class="results-eyebrow">Your Wealth Coach Results</p>
+                        <h1>Results for <span id="resultJobTitle">Your Opportunity</span></h1>
+                        <p class="results-meta" id="resultMeta">Review your score, money moves, skills, risks, and similar high-ROI roles.</p>
+                    </div>
+
+                    <div class="results-header-actions">
+                        <button type="button" class="outline-action" id="exportBtn">
+                            Export Report <span>&darr;</span>
+                        </button>
+                        <button type="button" class="outline-action" id="shareBtn">
+                            Share <span>&rarr;</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Coach Summary -->
+                <section class="coach-card">
+                    <div class="coach-top">
+                        <div class="coach-avatar">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M12 2l2.2 5.5L20 10l-5.8 2.5L12 18l-2.2-5.5L4 10l5.8-2.5L12 2Z"></path>
+                                <path d="M5 18l2 2"></path>
+                                <path d="M17 20l2-2"></path>
+                            </svg>
+                        </div>
+
+                        <div class="coach-copy">
+                            <div class="coach-title-row">
+                                <h2>Your Wealth Coach's Take</h2>
+                                <span class="coach-badge">Strong Opportunity</span>
+                            </div>
+
+                            <p id="aiSummary" class="ai-summary-text">
+                                Run an analysis to see your personalized wealth coach insight. This section will summarize what the opportunity means for your long-term wealth, career growth, and next best moves.
+                            </p>
+                        </div>
+
+                        <button type="button" class="coach-summary-btn" onclick="document.querySelector('.score-breakdown-card')?.scrollIntoView({ behavior: 'smooth' })">
+                            View Full Summary <span>&rarr;</span>
+                        </button>
+                    </div>
+
+                    <div class="coach-metrics">
+                        <div class="metric-card score-metric">
+                            <p>Wealth Score</p>
+                            <div class="score-circle">
+                                <svg viewBox="0 0 120 120">
+                                    <circle class="score-track" cx="60" cy="60" r="48"></circle>
+                                    <circle class="score-progress" cx="60" cy="60" r="48"></circle>
+                                </svg>
+                                <div>
+                                    <strong id="overallScore">—</strong>
+                                    <span>Excellent</span>
+                                </div>
+                            </div>
+                            <small id="recommendation">Load an analysis to see results</small>
+                        </div>
+
+                        <div class="metric-card">
+                            <p>20-Year Wealth Projection</p>
+                            <h3 id="projection20yr">—</h3>
+                            <span>Total projected wealth</span>
+                            <small class="green-pill" id="recommendationDesc">Compared with your current path</small>
+                        </div>
+
+                        <div class="metric-card">
+                            <p>Additional Wealth</p>
+                            <h3 class="green-text" id="additionalWealth">+$2.45M</h3>
+                            <span>more over 20 years</span>
+                            <small class="green-pill">Better long-term outcome</small>
+                        </div>
+
+                        <div class="metric-card">
+                            <p>Annual Impact</p>
+                            <h3 id="annualImpact">+$122K</h3>
+                            <span>additional wealth per year</span>
+                            <small>Average estimated impact</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Top move, surfaced before anything is buried in tabs -->
+                <div class="top-move-spotlight">
+                    <span class="tag">Top Move</span>
+                    <div class="move-icon green" style="width:44px;height:44px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    </div>
+                    <div>
+                        <h3>Aim $5K above the posted range</h3>
+                        <p>Set your target before you apply — it's the single biggest lever here.</p>
+                    </div>
+                    <div class="impact">
+                        <strong>+$380K</strong>
+                        <small>20YR IMPACT</small>
+                    </div>
+                </div>
+
+                <!-- Everything else lives behind tabs -->
+                <div class="result-tabs">
+                    <button type="button" class="result-tab-btn active" data-tab="moves">Money Moves</button>
+                    <button type="button" class="result-tab-btn" data-tab="score">Score Breakdown</button>
+                    <button type="button" class="result-tab-btn" data-tab="skills">Skills &amp; Roles</button>
+                    <button type="button" class="result-tab-btn" data-tab="risks">Risks</button>
+                    <button type="button" class="result-tab-btn" data-tab="invest">Investing &amp; Timeline</button>
+                    <button type="button" class="result-tab-btn" data-tab="financial">Financial Impact</button>
+                </div>
+
+                <!-- MONEY MOVES -->
+                <div class="result-tab-panel active" id="tab-moves">
+                    <div class="wealth-panel money-moves-panel">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon blue">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="9"></circle>
+                                        <circle cx="12" cy="12" r="4"></circle>
+                                        <path d="M12 3v3"></path>
+                                        <path d="M21 12h-3"></path>
+                                        <path d="M12 21v-3"></path>
+                                        <path d="M3 12h3"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2>Your Best Money Moves</h2>
+                                    <p>Actionable steps to increase your 20-year wealth.</p>
+                                </div>
+                            </div>
+
+                            <button type="button" class="small-outline">See All Actions</button>
+                        </div>
+
+                        <div class="money-move-list">
+                            <div class="money-move">
+                                <span class="move-rank">1</span>
+                                <div class="move-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                </div>
+                                <div>
+                                    <h3>Aim $5K above the posted range</h3>
+                                    <p>Set this as your target ask before you apply.</p>
+                                </div>
+                                <strong>+$380K <small>20YR IMPACT</small></strong>
+                            </div>
+
+                            <div class="money-move">
+                                <span class="move-rank">2</span>
+                                <div class="move-icon blue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                </div>
+                                <div>
+                                    <h3>Increase investment allocation to 25%</h3>
+                                    <p>Build wealth faster through consistent investing.</p>
+                                </div>
+                                <strong>+$290K <small>20YR IMPACT</small></strong>
+                            </div>
+
+                            <div class="money-move">
+                                <span class="move-rank">3</span>
+                                <div class="move-icon purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                                </div>
+                                <div>
+                                    <h3>Maximize 401(k) match and retirement savings</h3>
+                                    <p>Free money from your employer.</p>
+                                </div>
+                                <strong>+$180K <small>20YR IMPACT</small></strong>
+                            </div>
+
+                            <div class="money-move">
+                                <span class="move-rank">4</span>
+                                <div class="move-icon orange">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                </div>
+                                <div>
+                                    <h3>Keep monthly expenses below 35%</h3>
+                                    <p>More savings means more freedom and flexibility.</p>
+                                </div>
+                                <strong>+$120K <small>20YR IMPACT</small></strong>
+                            </div>
+                        </div>
+
+                        <div class="quick-win">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-4 12.7c.5.4.9 1 1 1.7l.2 1.6h5.6l.2-1.6c.1-.7.5-1.3 1-1.7A7 7 0 0 0 12 2Z"></path></svg>
+                            <span><strong>Quick Win:</strong> Aiming just $5K higher than the posted range before you apply could add major long-term wealth over your career.</span>
+                        </div>
+                    </div>
+
+                    <!-- What If Scenarios -->
+                    <section class="wealth-panel scenario-section" style="margin-top: 20px;">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6.3a2 2 0 0 1-.3 1L4 18a2 2 0 0 0 1.7 3h12.6a2 2 0 0 0 1.7-3l-4.7-8.7a2 2 0 0 1-.3-1V2"></path><line x1="7" y1="2" x2="17" y2="2"></line><line x1="8.5" y1="14" x2="15.5" y2="14"></line></svg>
+                                </div>
+                                <div>
+                                    <h2>What-If Scenarios</h2>
+                                    <p>See how changes impact your 20-year wealth.</p>
+                                </div>
+                            </div>
+
+                            <a href="#" class="text-link">View all scenarios <span>&rarr;</span></a>
+                        </div>
+
+                        <div class="scenario-buttons scenario-card-grid">
+                            <button type="button" class="scenario-card" data-scenario="growth">
+                                <span>Target +$5K Salary</span>
+                                <strong>+$380K</strong>
+                                <small>20YR IMPACT</small>
+                            </button>
+
+                            <button type="button" class="scenario-card" data-scenario="invest">
+                                <span>Invest 10% More</span>
+                                <strong>+$520K</strong>
+                                <small>20YR IMPACT</small>
+                            </button>
+
+                            <button type="button" class="scenario-card" data-scenario="expenses">
+                                <span>Reduce Expenses 20%</span>
+                                <strong>+$410K</strong>
+                                <small>20YR IMPACT</small>
+                            </button>
+
+                            <button type="button" class="scenario-card" data-scenario="remote">
+                                <span>Move to Lower COL Area</span>
+                                <strong>+$280K</strong>
+                                <small>20YR IMPACT</small>
+                            </button>
+                        </div>
+
+                        <div id="scenario-expenses" class="scenario-detail hidden"></div>
+                        <div id="scenario-invest" class="scenario-detail hidden"></div>
+                        <div id="scenario-remote" class="scenario-detail hidden"></div>
+                        <div id="scenario-growth" class="scenario-detail hidden"></div>
+                    </section>
+                </div>
+
+                <!-- SCORE BREAKDOWN -->
+                <div class="result-tab-panel" id="tab-score">
+                    <div class="wealth-panel score-breakdown-card">
+                        <div class="panel-heading score-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                                    </svg>
+                                </div>
+
+                                <div>
+                                    <h2>Score Breakdown</h2>
+                                    <p>How we scored this opportunity across your wealth factors.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- JavaScript will insert all 8 real factors here -->
+                        <div id="scoresGrid" class="coach-score-list"></div>
+
+                        <a href="#" class="text-link score-link">Learn how we score <span>&rarr;</span></a>
+                    </div>
+                </div>
+
+                <!-- SKILLS & ROLES -->
+                <div class="result-tab-panel" id="tab-skills">
+                    <div class="two-column-grid" style="grid-template-columns: 1fr 1fr;">
+                        <div class="wealth-panel compact-panel">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <div class="panel-icon blue">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"></path><path d="M6 12.5V17c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-4.5"></path><path d="M22 10v6"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Skills to Increase Your Future Value</h2>
+                                        <p>High-impact skills for this role.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="skillSuggestions" class="coach-list">
+                                <div class="coach-list-item">
+                                    <div>
+                                        <h3>Python Programming</h3>
+                                        <p>High Impact · Medium</p>
+                                    </div>
+                                    <a href="https://www.coursera.org/search?query=python" target="_blank" rel="noopener">Learn</a>
+                                </div>
+
+                                <div class="coach-list-item">
+                                    <div>
+                                        <h3>AWS Cloud Services</h3>
+                                        <p>High Impact · Medium</p>
+                                    </div>
+                                    <a href="https://skillbuilder.aws/" target="_blank" rel="noopener">Learn</a>
+                                </div>
+
+                                <div class="coach-list-item">
+                                    <div>
+                                        <h3>Data Analysis</h3>
+                                        <p>Medium Impact · Easy</p>
+                                    </div>
+                                    <a href="https://www.kaggle.com/learn" target="_blank" rel="noopener">Learn</a>
+                                </div>
+                            </div>
+
+                            <a href="#" class="text-link">View all recommended skills <span>&rarr;</span></a>
+                        </div>
+
+                        <div class="wealth-panel compact-panel">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <div class="panel-icon blue">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><path d="M2 13h20"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Find This Role Elsewhere</h2>
+                                        <p>Live openings for this exact title at other companies.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="adjacentRoles" class="similar-role-list">
+                                <a href="#" class="job-board-card">
+                                 
+                                    <div class="job-board-main">
+                                        <h3>Software Engineer</h3>
+                                        <p>Open roles on LinkedIn</p>
+                                        <div class="job-board-salary">
+                                            <span class="job-board-salary-label">Est. Annual Salary</span>
+                                            <strong class="job-board-salary-value">$130,560</strong>
+                                        </div>
+                                    </div>
+                                    <div class="job-board-range">
+                                        <span class="job-board-range-badge">BLS Range</span>
+                                        <strong class="job-board-range-value">$110,976-$150,144</strong>
+                                    </div>
+                                </a>
+
+                                <a href="#" class="job-board-card">
+                                   
+                                    <div class="job-board-main">
+                                        <h3>Software Engineer</h3>
+                                        <p>Open roles on Indeed</p>
+                                        <div class="job-board-salary">
+                                            <span class="job-board-salary-label">Est. Annual Salary</span>
+                                            <strong class="job-board-salary-value">$130,560</strong>
+                                        </div>
+                                    </div>
+                                    <div class="job-board-range">
+                                        <span class="job-board-range-badge">BLS Range</span>
+                                        <strong class="job-board-range-value">$110,976-$150,144</strong>
+                                    </div>
+                                </a>
+
+                                <a href="#" class="job-board-card">
+                                  
+                                    <div class="job-board-main">
+                                        <h3>Software Engineer</h3>
+                                        <p>Open roles on Glassdoor</p>
+                                        <div class="job-board-salary">
+                                            <span class="job-board-salary-label">Est. Annual Salary</span>
+                                            <strong class="job-board-salary-value">$130,560</strong>
+                                        </div>
+                                    </div>
+                                    <div class="job-board-range">
+                                        <span class="job-board-range-badge">BLS Range</span>
+                                        <strong class="job-board-range-value">$110,976-$150,144</strong>
+                                    </div>
+                                </a>
+
+                                <a href="#" class="job-board-card">
+                                  
+                                    <div class="job-board-main">
+                                        <h3>Software Engineer</h3>
+                                        <p>Open roles on ZipRecruiter</p>
+                                        <div class="job-board-salary">
+                                            <span class="job-board-salary-label">Est. Annual Salary</span>
+                                            <strong class="job-board-salary-value">$130,560</strong>
+                                        </div>
+                                    </div>
+                                    <div class="job-board-range">
+                                        <span class="job-board-range-badge">BLS Range</span>
+                                        <strong class="job-board-range-value">$110,976-$150,144</strong>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <a href="#" class="text-link">See more job boards <span>&rarr;</span></a>
+                        </div>
+                    </div>
+
+                    <!-- Job Description Insights (moved here from Details & Charts) -->
+                    <div class="wealth-panel jd-insights-panel" style="margin-top: 20px;">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                </div>
+                                <div>
+                                    <h2>Job Description Insights</h2>
+                                    <p>Skills and benefits detected in the posting.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="jdInsights"></div>
+                    </div>
+                </div>
+
+                <!-- RISKS -->
+                <div class="result-tab-panel" id="tab-risks">
+                    <div class="wealth-panel compact-panel">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon amber">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><line x1="12" y1="8" x2="12" y2="13"></line><line x1="12" y1="16.5" x2="12.01" y2="16.5"></line></svg>
+                                </div>
+                                <div>
+                                    <h2>Risk Flags</h2>
+                                    <p>Factors to keep in mind.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="riskFlags" class="risk-flags coach-risk-list">
+                            <div class="risk-item">
+                                <span class="amber">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                </span>
+                                <div>
+                                    <h3>Automation risk is medium</h3>
+                                    <p>AI tools may impact some responsibilities.</p>
+                                </div>
+                            </div>
+
+                            <div class="risk-item">
+                                <span class="blue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                </span>
+                                <div>
+                                    <h3>High cost of living</h3>
+                                    <p>May reduce your savings rate.</p>
+                                </div>
+                            </div>
+
+                            <div class="risk-item">
+                                <span class="purple">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><line x1="12" y1="12" x2="12" y2="12.01"></line><path d="M12 15v-1c0-.6.4-1 1-1.3.6-.3 1-.8 1-1.4 0-.9-.9-1.3-2-1.3s-2 .4-2 1.3"></path></svg>
+                                </span>
+                                <div>
+                                    <h3>Benefits information unclear</h3>
+                                    <p>Verify equity, bonus, and retirement match.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#" class="text-link">See how we assess risks <span>&rarr;</span></a>
+                    </div>
+                </div>
+
+                <!-- INVESTING & TIMELINE -->
+                <div class="result-tab-panel" id="tab-invest">
+                    <div class="two-column-grid">
+                        <div class="wealth-panel investment-suggestions">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <div class="panel-icon green">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Beginner Wealth-Building Options</h2>
+                                        <p>Smart ways to invest and grow your money.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="investment-options">
+                                <div class="investment-option">
+                                    <div class="investment-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                    </div>
+                                    <div class="investment-name">Index Funds / ETFs</div>
+                                    <div class="investment-desc">Low-cost, diversified investing for long-term growth.</div>
+                                    <div class="investment-links">
+                                        <a href="https://www.vanguard.com/en/investors/etfs/etf-products" target="_blank" rel="noopener">Vanguard</a>
+                                        <a href="https://www.fidelity.com/etfs/overviews" target="_blank" rel="noopener">Fidelity</a>
+                                    </div>
+                                </div>
+
+                                <div class="investment-option">
+                                    <div class="investment-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M4 21V9l8-6 8 6v12"></path><path d="M9 21v-6h6v6"></path><path d="M9 12h.01M15 12h.01"></path></svg>
+                                    </div>
+                                    <div class="investment-name">401(k) / IRA</div>
+                                    <div class="investment-desc">Tax-advantaged accounts for retirement savings.</div>
+                                    <div class="investment-links">
+                                        <a href="https://www.investopedia.com/terms/4/401k.asp" target="_blank" rel="noopener">Learn 401(k)</a>
+                                        <a href="https://www.irs.gov/retirement-plans/individuals/ira-faqs" target="_blank" rel="noopener">IRA Guide</a>
+                                    </div>
+                                </div>
+
+                                <div class="investment-option">
+                                    <div class="investment-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                                    </div>
+                                    <div class="investment-name">Bonds</div>
+                                    <div class="investment-desc">Lower-risk, steady income and stability.</div>
+                                    <div class="investment-links">
+                                        <a href="https://www.treasurydirect.gov/" target="_blank" rel="noopener">TreasuryDirect</a>
+                                        <a href="https://www.investopedia.com/terms/b/bond.asp" target="_blank" rel="noopener">Bond Guide</a>
+                                    </div>
+                                </div>
+
+                                <div class="investment-option">
+                                    <div class="investment-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                    </div>
+                                    <div class="investment-name">REITs</div>
+                                    <div class="investment-desc">Real estate exposure without owning property.</div>
+                                    <div class="investment-links">
+                                        <a href="https://www.investopedia.com/terms/r/reit.asp" target="_blank" rel="noopener">REIT Basics</a>
+                                        <a href="https://www.fundrise.com/" target="_blank" rel="noopener">Fundrise</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wealth-panel timeline-section">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <div class="panel-icon blue">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    </div>
+                                    <div>
+                                        <h2>Career Progression Timeline</h2>
+                                        <p>Potential milestones on this path.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progression-timeline" id="progressionTimeline">
+                                <div class="progression-step">
+                                    <div class="progression-marker"></div>
+                                    <div class="progression-content">
+                                        <div class="progression-label">Now</div>
+                                        <p class="progression-description">Build skills, deliver value early, and negotiate your next raise.</p>
+                                    </div>
+                                </div>
+                                <div class="progression-step">
+                                    <div class="progression-marker"></div>
+                                    <div class="progression-content">
+                                        <div class="progression-label">1-2 Yrs</div>
+                                        <p class="progression-description">Deepen your expertise, earn strong performance reviews, and increase income.</p>
+                                    </div>
+                                </div>
+                                <div class="progression-step">
+                                    <div class="progression-marker"></div>
+                                    <div class="progression-content">
+                                        <div class="progression-label">3-5 Yrs</div>
+                                        <p class="progression-description">Move into a senior role, expanding your scope and leadership.</p>
+                                    </div>
+                                </div>
+                                <div class="progression-step">
+                                    <div class="progression-marker"></div>
+                                    <div class="progression-content">
+                                        <div class="progression-label">5-10 Yrs</div>
+                                        <p class="progression-description">Lead projects and mentor others, maximizing your earning potential.</p>
+                                    </div>
+                                </div>
+                                <div class="progression-step">
+                                    <div class="progression-marker"></div>
+                                    <div class="progression-content">
+                                        <div class="progression-label">10+ Yrs</div>
+                                        <p class="progression-description">Leverage the wealth you've built through consistent investing and compounding.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="coach-tip">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.2 7.8 14.6 14.6 7.8 16.2 9.4 9.4 16.2 7.8"></polygon></svg>
+                                <span><strong>Coach Tip:</strong> Consistent skill building plus smart money moves today creates exponentially more freedom tomorrow.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FINANCIAL IMPACT -->
+                <div class="result-tab-panel" id="tab-financial">
+                    <div class="wealth-panel financial-section">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon green">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                </div>
+                                <div>
+                                    <h2>Financial Impact</h2>
+                                    <p>Compensation, taxes, and cash flow for this role.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="salary-visualization">
+                            <h4>Salary Range Visualization</h4>
+                            <div class="salary-bar">
+                                <div class="salary-range" id="salaryRangeBar">
+                                    <div class="salary-point" id="salaryPoint"></div>
+                                </div>
+                            </div>
+                            <p id="salaryRangeCaption"></p>
+                        </div>
+
+                        <div class="fin-groups" id="financialGrid"></div>
+                    </div>
+
+                    <div class="wealth-panel investment-projections-panel" style="margin-top: 20px;">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <div class="panel-icon blue">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                </div>
+                                <div>
+                                    <h2>Investment Growth Projections</h2>
+                                    <p>Assuming your investable income grows at 7% annually.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="projections-grid">
+                            <div class="projection">
+                                <div class="projection-label">5 Years</div>
+                                <div class="projection-value" id="projection5yr">—</div>
+                            </div>
+                            <div class="projection">
+                                <div class="projection-label">10 Years</div>
+                                <div class="projection-value" id="projection10yr">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-toggle-row">
+                        <button type="button" class="small-outline" id="showChartsBtn">
+                            Show Charts <span id="showChartsArrow">&darr;</span>
+                        </button>
+                    </div>
+
+                    <div class="charts-section hidden" id="chartsSection">
+                        <div class="chart-container">
+                            <h4>Score Breakdown</h4>
+                            <canvas id="scoreChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Income Allocation</h4>
+                            <canvas id="incomeChart"></canvas>
+                        </div>
+                        <div class="chart-container full-width">
+                            <h4>Investment Growth Over Time</h4>
+                            <canvas id="growthChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save / Compare / Export -->
+                <section class="result-action-grid" style="margin-top: 24px;">
+                    <button type="button" class="result-action-card" id="saveAnalysisBtn">
+                        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"></path></svg></span>
+                        <div>
+                            <h3>Save This Analysis</h3>
+                            <p>Save to your dashboard for future reference.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </button>
+
+                    <button type="button" class="result-action-card" id="addComparisonBtn">
+                        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="M16 21l4-4-4-4"></path><path d="M20 17H4"></path></svg></span>
+                        <div>
+                            <h3>Compare Opportunities</h3>
+                            <p>Compare this role with other opportunities.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </button>
+
+                    <button type="button" class="result-action-card" id="viewSavedBtn">
+                        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>
+                        <div>
+                            <h3>View Saved Analyses</h3>
+                            <p>Review previous opportunities.</p>
+                        </div>
+                        <strong>&rarr;</strong>
+                    </button>
+                </section>
+
+                <div id="savedAnalysesPanel" class="saved-analyses-panel hidden"></div>
+
+                <div class="comparison-section hidden">
+                    <h3>Compare Opportunities</h3>
+                    <div class="comparison-grid" id="comparisonGrid">
+                        <p class="comparison-empty">No jobs added yet.</p>
+                    </div>
+                </div>
+
+                <div class="disclaimer">
+                    <p>This analysis is for informational purposes only and does not constitute financial, legal, tax, investment, or career advice. Results are estimates and may not reflect actual future outcomes.</p>
+                </div>
+            </section>
+        </div>
+
+        <div id="noResults" class="no-results">
+            <div class="no-results-content">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </div>
+                <h3>No Analysis Yet</h3>
+                <p>Complete the form in the <strong>Analyze</strong> tab to see your wealth coach results.</p>
+                <button class="btn btn-primary" onclick="document.querySelector('[data-tab=&quot;analyze&quot;]').click()">Go to Analyze →</button>
+            </div>
+        </div>
+    </div>

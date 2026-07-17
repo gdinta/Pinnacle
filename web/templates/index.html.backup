@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinnacle Financial</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Navigation Header with Theme Toggle -->
+    <header class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <div class="logo">
+                        <img src="{{ url_for('static', filename='logo.png') }}" 
+                             alt="Pinnacle Financial Logo" 
+                            class="logo-img">
+                        <h1>Pinnacle Financial</h1>
+                    </div>
+                    <button id="themeToggle" class="theme-toggle" title="Toggle dark/light mode">🌙</button>
+                </div>
+                <p class="tagline">Helping you reach the pinnacle of your financial future​.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Landing Section -->
+        <section id="landing" class="landing-section">
+            <div class="landing-content">
+                <h2>Make Smarter Career Decisions</h2>
+                <p class="subtitle">Pinnacle Financial analyzes job opportunities using AI-style scoring to estimate how a role could impact your future wealth.</p>
+                
+                <div class="feature-highlights">
+                    <div class="feature">
+                        <div class="feature-icon">💰</div>
+                        <h3>Wealth Impact</h3>
+                        <p>See how salary, taxes, and expenses affect your long-term wealth building</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📈</div>
+                        <h3>Market Demand</h3>
+                        <p>Understand the demand and growth potential for your role</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🤖</div>
+                        <h3>Automation Risk</h3>
+                        <p>Learn your role's resilience to automation and AI disruption</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📊</div>
+                        <h3>Investment Potential</h3>
+                        <p>Calculate how much you could invest from this role's income</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section id="formSection" class="form-section">
+            <div class="form-container">
+                <h3>Analyze Your Job Opportunity</h3>
+                
+                <!-- Form Progress Bar (Feature 10) -->
+                <div class="form-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText">0% Complete</p>
+                </div>
+                
+                <form id="jobAnalyzerForm" class="job-form">
+                    <!-- Job Information -->
+                    <fieldset class="form-group">
+                        <legend>Job Information</legend>
+                        
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="jobTitle">
+                                    Job Title 
+                                    <span class="tooltip" data-tooltip="e.g., IAM Analyst, Engineer, Manager">?</span>
+                                </label>
+                                <input type="text" id="jobTitle" name="jobTitle" placeholder="e.g., Identity and Access Management Analyst" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="companyName">
+                                    Company Name 
+                                    <span class="tooltip" data-tooltip="Company name for research">?</span>
+                                </label>
+                                <input type="text" id="companyName" name="companyName" placeholder="e.g., Microsoft" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="jobLocation">
+                                    Job Location 
+                                    <span class="tooltip" data-tooltip="City and state for cost of living">?</span>
+                                </label>
+                                <input type="text" id="jobLocation" name="jobLocation" placeholder="e.g., Philadelphia, PA" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="workType">
+                                    Work Type 
+                                    <span class="tooltip" data-tooltip="Remote, Hybrid, or On-site">?</span>
+                                </label>
+                                <select id="workType" name="workType" required>
+                                    <option value="">Select...</option>
+                                    <option value="Remote">Remote</option>
+                                    <option value="Hybrid">Hybrid</option>
+                                    <option value="On-site">On-site</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-field full-width">
+                            <label for="jobDescription">Job Description *</label>
+                            <textarea id="jobDescription" name="jobDescription" placeholder="Paste the job description here..." rows="4" required></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- User Financial Profile -->
+                    <fieldset class="form-group">
+                        <legend>Your Financial Profile</legend>
+                        
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="age">
+                                    Age 
+                                    <span class="tooltip" data-tooltip="Used for career length estimates">?</span>
+                                </label>
+                                <input type="number" id="age" name="age" placeholder="e.g., 24" min="18" max="100" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="currentSalary">
+                                    Current Annual Salary ($) 
+                                    <span class="tooltip" data-tooltip="Your current gross salary">?</span>
+                                </label>
+                                <input type="number" id="currentSalary" name="currentSalary" placeholder="e.g., 65000" min="0" required>
+                            </div>
+                        </div>
+
+                        <!-- Salary Slider (Feature 3) -->
+                        <fieldset class="form-group">
+                            <legend>Adjust Salary to See Real-Time Impact</legend>
+                            <div class="salary-slider-wrapper">
+                                <input type="range" id="salarySlider" min="30000" max="300000" step="5000" value="65000">
+                                <div class="salary-slider-display">
+                                    <span id="sliderValue" style="font-weight: bold; color: var(--accent-green);">$65,000</span>
+                                    <span id="sliderAfterTax" style="font-size: 0.9rem; color: var(--text-tertiary);">After tax estimate</span>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="currentMonthlyExpenses">
+                                    Current Monthly Expenses ($) 
+                                    <span class="tooltip" data-tooltip="Rent, food, utilities, etc.">?</span>
+                                </label>
+                                <input type="number" id="currentMonthlyExpenses" name="currentMonthlyExpenses" placeholder="e.g., 2800" min="0" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="currentSavings">
+                                    Current Savings ($) 
+                                    <span class="tooltip" data-tooltip="Emergency fund + savings">?</span>
+                                </label>
+                                <input type="number" id="currentSavings" name="currentSavings" placeholder="e.g., 6000" min="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="studentLoanBalance">
+                                    Student Loan Balance ($) 
+                                    <span class="tooltip" data-tooltip="Total remaining student debt">?</span>
+                                </label>
+                                <input type="number" id="studentLoanBalance" name="studentLoanBalance" placeholder="e.g., 25000" min="0" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="desiredInvestmentPercentage">
+                                    Desired Investment % 
+                                    <span class="tooltip" data-tooltip="% of after-tax income to invest">?</span>
+                                </label>
+                                <input type="number" id="desiredInvestmentPercentage" name="desiredInvestmentPercentage" placeholder="e.g., 20" min="0" max="100" required>
+                            </div>
+                        </div>
+
+                        <div class="form-field full-width">
+                            <label for="currentLocation">
+                                Current Location 
+                                <span class="tooltip" data-tooltip="For cost of living calculation">?</span>
+                            </label>
+                            <input type="text" id="currentLocation" name="currentLocation" placeholder="e.g., Malvern, PA" required>
+                        </div>
+                    </fieldset>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="analyzeBtn">Analyze Wealth Potential</button>
+                        <button type="button" class="btn btn-secondary" id="loadSampleBtn">Load Sample Job</button>
+                        <button type="reset" class="btn btn-tertiary">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state hidden">
+            <div class="spinner"></div>
+            <p>Analyzing your wealth potential...</p>
+        </div>
+
+        <!-- Results Dashboard -->
+        <section id="resultsSection" class="results-section hidden">
+            <!-- Main Recommendation Card -->
+            <div class="recommendation-card" id="recommendationCard">
+                <div class="recommendation-content">
+                    <div class="recommendation-score" id="recommendationScore">89</div>
+                    <div class="recommendation-text">
+                        <h3 id="recommendationLevel">Highly Recommended</h3>
+                        <p id="recommendationDescription">This appears to be an excellent wealth-building opportunity with strong fundamentals.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Score Cards Grid -->
+            <div class="scores-grid">
+                <div class="score-card">
+                    <div class="score-label">Salary Growth</div>
+                    <div class="score-value" id="salaryGrowthScore">85</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="salaryGrowthBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Market Demand</div>
+                    <div class="score-value" id="marketDemandScore">95</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="marketDemandBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Company Health</div>
+                    <div class="score-value" id="companyHealthScore">95</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="companyHealthBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Automation Safety</div>
+                    <div class="score-value" id="automationSafetyScore">82</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="automationSafetyBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Cost of Living</div>
+                    <div class="score-value" id="costOfLivingScore">85</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="costOfLivingBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Tax Efficiency</div>
+                    <div class="score-value" id="taxEfficiencyScore">78</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="taxEfficiencyBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">Investment Potential</div>
+                    <div class="score-value" id="investmentPotentialScore">72</div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" id="investmentPotentialBar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Impact Section -->
+            <div class="financial-section">
+                <h3>Financial Impact</h3>
+                
+                <!-- Salary Visualization (Feature 8) -->
+                <div class="salary-visualization">
+                    <h4>Salary Range Visualization</h4>
+                    <div class="salary-bar">
+                        <div class="salary-range" id="salaryRange"></div>
+                        <div class="salary-point" id="salaryPoint"></div>
+                    </div>
+                    <p id="salaryText" style="text-align: center; color: var(--text-secondary);"></p>
+                </div>
+                
+                <div class="financial-grid">
+                    <div class="financial-item">
+                        <label>Estimated Salary Range</label>
+                        <div class="financial-value" id="salaryRangeText">$85,000 - $120,000</div>
+                    </div>
+                    <div class="financial-item">
+                        <label>Estimated Annual Salary</label>
+                        <div class="financial-value" id="salaryMidpoint">$102,500</div>
+                    </div>
+                    <div class="financial-item">
+                        <label>Federal Tax (Est.)</label>
+                        <div class="financial-value" id="federalTax">$18,450</div>
+                    </div>
+                    <div class="financial-item">
+                        <label>State Tax (Est.)</label>
+                        <div class="financial-value" id="stateTax">$3,146</div>
+                    </div>
+                    <div class="financial-item highlight">
+                        <label>After-Tax Income</label>
+                        <div class="financial-value" id="afterTaxIncome">$80,904</div>
+                    </div>
+                    <div class="financial-item">
+                        <label>Adjusted Annual Expenses</label>
+                        <div class="financial-value" id="adjustedExpenses">$33,600</div>
+                    </div>
+                    <div class="financial-item highlight">
+                        <label>Annual Investable Income</label>
+                        <div class="financial-value" id="investableIncome">$9,461</div>
+                    </div>
+                    <div class="financial-item">
+                        <label>Flexible Income</label>
+                        <div class="financial-value" id="flexibleIncome">$47,304</div>
+                    </div>
+                </div>
+
+                <div class="investment-projections">
+                    <h4>Investment Growth Projections (7% Annual Return)</h4>
+                    <div class="projections-grid">
+                        <div class="projection">
+                            <div class="projection-label">5 Years</div>
+                            <div class="projection-value" id="projection5yr">$54,821</div>
+                        </div>
+                        <div class="projection">
+                            <div class="projection-label">10 Years</div>
+                            <div class="projection-value" id="projection10yr">$132,778</div>
+                        </div>
+                        <div class="projection">
+                            <div class="projection-label">20 Years</div>
+                            <div class="projection-value" id="projection20yr">$489,236</div>
+                        </div>
+                    </div>
+                </div>
+
+               <!-- Investment Suggestions -->
+<div class="investment-suggestions">
+    <h4>💡 Where to Invest Your Money</h4>
+    <div class="investment-options">
+        <div class="investment-option">
+            <div class="investment-icon">📈</div>
+            <div class="investment-name">Index Funds (S&P 500)</div>
+            <div class="investment-desc">Low cost, diversified, ~10% returns</div>
+            <div class="investment-links">
+                <a href="https://www.vanguard.com/en/investors/etfs/etf-products" target="_blank">Vanguard ETFs</a>
+                <a href="https://www.fidelity.com/etfs/overviews" target="_blank">Fidelity ETFs</a>
+            </div>
+        </div>
+
+        <div class="investment-option">
+            <div class="investment-icon">🏦</div>
+            <div class="investment-name">401(k) / IRA</div>
+            <div class="investment-desc">Tax-advantaged retirement accounts</div>
+            <div class="investment-links">
+                <a href="https://www.investopedia.com/terms/4/401k.asp" target="_blank">Learn 401(k)</a>
+                <a href="https://www.irs.gov/retirement-plans/individuals/ira-faqs" target="_blank">IRA Guide</a>
+            </div>
+        </div>
+
+        <div class="investment-option">
+            <div class="investment-icon">🏠</div>
+            <div class="investment-name">Real Estate / REITs</div>
+            <div class="investment-desc">Property investments with dividends</div>
+            <div class="investment-links">
+                <a href="https://www.investopedia.com/terms/r/reit.asp" target="_blank">REIT Basics</a>
+                <a href="https://www.fundrise.com/" target="_blank">Fundrise</a>
+            </div>
+        </div>
+
+        <div class="investment-option">
+            <div class="investment-icon">💳</div>
+            <div class="investment-name">Bonds</div>
+            <div class="investment-desc">Lower risk, steady returns 3-5%</div>
+            <div class="investment-links">
+                <a href="https://www.investopedia.com/terms/b/bond.asp" target="_blank">Bond Guide</a>
+                <a href="https://www.treasurydirect.gov/" target="_blank">Treasury Direct</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- What-If Scenarios (Feature 4) -->
+<div class="scenario-section">
+    <h3>What-If Scenarios?</h3>
+    <p style="color: var(--text-tertiary); margin-bottom: var(--spacing-lg);">Hover over to explore how different decisions could impact your wealth:</p>
+    <div class="scenario-buttons">
+        <button class="btn btn-secondary btn-sm" data-scenario="expenses">💰 Reduce Expenses 20%</button>
+        <button class="btn btn-secondary btn-sm" data-scenario="invest">📈 Invest 30% Instead</button>
+        <button class="btn btn-secondary btn-sm" data-scenario="remote">🏠 Switch to Remote</button>
+        <button class="btn btn-secondary btn-sm" data-scenario="growth">📊 Career Growth Path</button>
+    </div>
+
+    <!-- Scenario Details (Hidden by default, shows on hover) -->
+    <div id="scenario-expenses" class="scenario-detail hidden">
+        <h4>💰 Reduce Expenses by 20%</h4>
+        <div class="scenario-content">
+            <p><strong>Current Annual Expenses:</strong> <span id="scenario-exp-current">$33,600</span></p>
+            <p><strong>New Annual Expenses:</strong> <span id="scenario-exp-new">$26,880</span></p>
+            <p><strong>Annual Savings:</strong> <span id="scenario-exp-save">$6,720</span></p>
+            <p><strong>20-Year Investment Value:</strong> <span id="scenario-exp-value">$196,000+</span></p>
+            <p style="color: var(--accent-green); font-weight: bold; margin-top: 10px;">✓ Small lifestyle changes = Big wealth impact!</p>
+        </div>
+    </div>
+
+    <div id="scenario-invest" class="scenario-detail hidden">
+        <h4>📈 Invest 30% Instead of 20%</h4>
+        <div class="scenario-content">
+            <p><strong>Current Investment (20%):</strong> <span id="scenario-inv-current">$9,461/year</span></p>
+            <p><strong>New Investment (30%):</strong> <span id="scenario-inv-new">$14,191/year</span></p>
+            <p><strong>Additional Annual Investment:</strong> <span id="scenario-inv-add">$4,730/year</span></p>
+            <p><strong>Current 20-Year Value:</strong> <span id="scenario-inv-old">$489,236</span></p>
+            <p><strong>New 30-Year Value:</strong> <span id="scenario-inv-new-value">$733,854</span></p>
+            <p style="color: var(--accent-green); font-weight: bold; margin-top: 10px;">✓ Extra 10% investment = $244K more in 20 years!</p>
+        </div>
+    </div>
+
+    <div id="scenario-remote" class="scenario-detail hidden">
+        <h4>🏠 Switch to Remote Work</h4>
+        <div class="scenario-content">
+            <p><strong>Current Setup:</strong> On-site or Hybrid in expensive city</p>
+            <p><strong>Savings from Remote:</strong></p>
+            <ul style="margin: 10px 0; padding-left: 20px; color: var(--text-secondary);">
+                <li>No commute costs: ~$200/month ($2,400/year)</li>
+                <li>Relocation savings: $5,000-$10,000/year</li>
+                <li>Flexible location: Live in lower cost area</li>
+            </ul>
+            <p><strong>Potential Total Savings:</strong> $7,400-$12,400/year</p>
+            <p style="color: var(--accent-green); font-weight: bold; margin-top: 10px;">✓ Remote work could increase investable income by 15-30%!</p>
+        </div>
+    </div>
+
+    <div id="scenario-growth" class="scenario-detail hidden">
+        <h4>📊 Career Growth Path (15% Raise)</h4>
+        <div class="scenario-content">
+            <p><strong>Current Salary:</strong> <span id="scenario-growth-current">$102,500</span></p>
+            <p><strong>With 15% Raise (2-3 years):</strong> <span id="scenario-growth-new">$117,875</span></p>
+            <p><strong>Additional Annual Income:</strong> <span id="scenario-growth-add">$15,375</span></p>
+            <p><strong>New 20-Year Investment Value:</strong> <span id="scenario-growth-value">$650,000+</span></p>
+            <p style="color: var(--accent-green); font-weight: bold; margin-top: 10px;">✓ Career growth + investing = Compound wealth effect!</p>
+        </div>
+    </div>
+</div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h4>Score Breakdown</h4>
+                    <canvas id="scoreChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <h4>Income Allocation</h4>
+                    <canvas id="incomeChart"></canvas>
+                </div>
+
+                <div class="chart-container full-width">
+                    <h4>Investment Growth Over Time</h4>
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+
+            <!-- AI Summary -->
+            <div class="ai-summary-section">
+                <h3>AI-Powered Insight</h3>
+                <p id="aiSummary" class="ai-summary-text">
+                    This role appears to be a strong wealth-building opportunity because it is in a high-demand field, has low automation risk, and provides enough estimated after-tax income to support long-term investing.
+                </p>
+            </div>
+
+            <!-- Risk Flags -->
+            <div class="risk-section">
+                <h3>Risk Assessment</h3>
+                <div id="riskFlags" class="risk-flags">
+                    <!-- Risk flags will be populated here -->
+                </div>
+            </div>
+
+            <!-- Skill Suggestions -->
+            <div class="skills-section">
+                <h3>Recommended Skills to Develop</h3>
+                <div id="skillSuggestions" class="skills-list">
+                    <!-- Skills will be populated here with hover details -->
+                </div>
+            </div>
+
+            <!-- Adjacent Roles -->
+            <div class="adjacent-roles-section">
+                <h3>Similar Roles with Higher ROI Potential</h3>
+                <div id="adjacentRoles" class="roles-list">
+                    <!-- Adjacent roles will be populated here with links -->
+                </div>
+            </div>
+
+            <!-- Comparison Section (Feature 2) -->
+            <div class="comparison-section" id="comparisonSection">
+                <h3>Compare Opportunities</h3>
+                <button class="btn btn-secondary" id="addComparisonBtn">+ Add This Job to Comparison</button>
+                
+                <div class="comparison-grid" id="comparisonGrid">
+                    <!-- Comparison cards will appear here -->
+                </div>
+            </div>
+
+            <!-- Save Analysis (Feature 9) -->
+            <div class="save-section">
+                <button class="btn btn-secondary" id="saveAnalysisBtn">💾 Save This Analysis</button>
+                <button class="btn btn-tertiary" id="viewSavedBtn">📋 View Saved Analyses</button>
+            </div>
+
+            <!-- Results and Actions -->
+            <div class="results-actions">
+                <button type="button" class="btn btn-primary" id="exportBtn">📥 Export Report</button>
+                <button type="button" class="btn btn-secondary" id="newAnalysisBtn">🔄 New Analysis</button>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <p>⚠️ This is an educational estimate for demo purposes and should not be treated as financial, tax, investment, or career advice. Consult with financial and career professionals before making major decisions.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>WealthPath AI - Career ROI Analysis Demo | Built with Python Flask</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Toggle scenario details
+        function toggleScenario(scenario) {
+            const element = document.getElementById(`scenario-${scenario}`);
+            if (element) {
+                element.classList.toggle('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
